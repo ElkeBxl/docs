@@ -1100,20 +1100,33 @@ In app.vue, lets bring in the announcement with `role="status"`.
 >The aria live region role of status has an implicit aria-live value of polite, which allows a user to be notified via AT (such as a screen reader) when status messages are added.
 [Learn about role="status".](https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA22.html)
 
+Add the HTML to show the announcement in your template tag right behind the closing header-tag.
 ```html
 <p role="status">{{routeAnnouncement}}</p>
 ```
 
+And add the following in the App.vue script to be able to get the route announcement and update it.
 ```js
 methods: {
   ...mapActions(["update_routeAnnouncement"]),
   announceRoute(message) {
     this.update_routeAnnouncement(message);
   }
-}
+},
+computed: {
+  ...mapState(["routeAnnouncement"])
+},
 ```
 
 In App.vue, lets keep track of when the route changes, and change the route announcement, as well as change the `aria-current` to active link. [Learn about aria-current.](https://www.w3.org/TR/wai-aria-1.1/#aria-current)
+
+Start of with adding `ref="nav"` to our nav-tag so it looks like this:
+```html
+<div id="nav" ref="nav">
+  <router-link to="/">Home</router-link>|
+  <router-link to="/Instructions">Instructions</router-link>
+</div>
+```
 
 ```js
 watch: {
@@ -1197,7 +1210,7 @@ Add `id="main"` along with aria-labele inside the `<main>` tags in Home.vue and 
 <main class="container" v-else id="main" tabindex="-1" aria-labelledby="gameTitle">
       <h2 id="gameTitle">Game Board</h2>
 
-<!-- Inside Home.vue -->
+<!-- Inside Instructions.vue -->
 <main class="main-instruction" id="main" tabindex="-1" aria-labelledby="instructionsTitle">
       <h2 id="instructionsTitle">Instructions</h2>
 ```
