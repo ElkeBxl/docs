@@ -1221,7 +1221,7 @@ This will allow screen readers to pick up the content of the id as the accessibl
 
 Lets make sure that we are letting users know what is happening in the game as they play. They need to know the content of the cards they flip, whether they got a match or not, how many moves and stars they have left, how many matches are left in the game.
 
-Try to do this one yourself without looking ahead. Only look at the code if you get stuck. Feel free to ask questions!!
+Try to do this one yourself without looking ahead. Only look at the code if you get stuck. Feel free to ask questions!
 
 :::tip
 [Learn about `aria-label`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-label_attribute)
@@ -1439,6 +1439,55 @@ export default {
   }
 };
 </script>
+```
+
+We will update our store as well by adding gameAnnounce in the state along with an action/mutation to update it and gameUpdate in a getter: 
+
+```js
+import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    // ... other state 
+    gameAnnounce: ""
+  },
+  getters: {
+    // ... other getters
+    gameUpdate: state => {
+      let update =
+        "You have " +
+        state.numMoves +
+        " total moves with " +
+        state.stars +
+        " stars left.";
+      return update;
+    },
+    winningMessage: state => {
+      let msg;
+      if (state.stars != 1) {
+        msg = `You won the game with ${state.stars} stars left!`;
+      } else {
+        msg = `You won the game with ${state.stars} star left!`;
+      }
+      return msg;
+    }
+  },
+  mutations: {
+    // ... other mutations
+    UPDATE_GAMEANNOUNCE(state, payload) {
+      state.gameAnnounce = payload;
+    }
+  },
+  actions: {
+    // ... other actions
+    update_GameAnnounce({ commit }, { message }) {
+      commit("UPDATE_GAMEANNOUNCE", message);
+    }
+  }
+});
 ```
 
 ### Update Winning to focus
